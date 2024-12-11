@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Box, Button, Typography } from "@mui/material";
 import Question from "./components/Question";
+import questions from './data/questions.json'
 
 function App() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [questions, setQuestions] = useState([]);
+ 
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch("/api/getQuestions");
-        const data = await response.json();
-        setQuestions(data);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
-
-    fetchQuestions();
-  }, []);
 
   const generateRandomQuestion = () => {
     if (!questions.length) return;
