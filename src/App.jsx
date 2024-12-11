@@ -1,20 +1,33 @@
-import { useState } from "react";
-import Question from "./components/Question";
-import questionsData from "./data/questions.json";
-import { Box, Button, Typography } from "@mui/material";
-
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Box, Button, Typography } from "@mui/material";
+import Question from "./components/Question";
 
 function App() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch("/api/getQuestions");
+        const data = await response.json();
+        setQuestions(data);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
 
   const generateRandomQuestion = () => {
-    const questions = questionsData.questions;
+    if (!questions.length) return;
+
     const randomQuestion =
       questions[Math.floor(Math.random() * questions.length)];
-
     setCurrentQuestion(randomQuestion);
   };
 
@@ -72,7 +85,6 @@ function App() {
               height: "290px",
               width: "290px",
               borderRadius: "50%",
-
               textAlign: "center",
             }}
           >
